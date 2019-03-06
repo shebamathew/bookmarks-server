@@ -4,38 +4,14 @@ const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
-const winston = require('winston'); 
-
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
-  transports: [
-    new winston.transports.File({ filename: 'info.log' })
-  ]
-});
-
-if (NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }));
-}
+const bookmarkRouter = require('./bookmarkRouter')
+const listRouter = require('./list-router')
 
 // data 
-const bookmarks = [{ 
-  id: 1,
-  title: 'Github',
-  url: 'http://www.github.com',
-  rating: '4',
-  desc: 'brings together the world\'s largest community of developers.'
-}]; 
-
-const lists = [{
-  id: 1, 
-  header: "Your Bookmarks", 
-  bookmarkIds: [1]
-}]
 
 const app = express()
+app.use(bookmarkRouter)
+app.use(listRouter)
 
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
@@ -44,7 +20,9 @@ const morganOption = (NODE_ENV === 'production')
 app.use(morgan(morganOption))
 app.use(cors())
 app.use(helmet())
+app.use(express.json()); 
 
+//middleware
 app.use(function (req, res, next) {
   const apiToken = process.env.API_TOKEN
   const authToken = req.get('Authorization')
@@ -53,12 +31,8 @@ app.use(function (req, res, next) {
     logger.error(`Unauthorized request to path: ${req.path}`);
     return res.status(401).json({ error: 'Unauthorized request' })
   }
-  // move to the next middleware
-  next()
-})
 
-app.get('/', (req, res) => {
-  res.send('Hello, world!')
+  next()
 })
 
 app.use(function errorHandler(error, req, res, next){
