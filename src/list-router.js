@@ -1,6 +1,6 @@
 const express = require('express')
 const uuid = require('uuid/v4')
-const logger = require('.logger)
+const logger = require('.logger')
 const { bookmarks, lists } = require('../store')
 
 const listRouter = express.Router()

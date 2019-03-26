@@ -22,3 +22,16 @@
 {"message":"Unauthorized request to path: /","level":"error"}
 {"message":"Unauthorized request to path: /","level":"error"}
 {"message":"Unauthorized request to path: /","level":"error"}
+{"message":"Bookmar with id 2 not found.","level":"error"}
+{"message":"List with id 2 not found.","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Bookmark with id ed5d2623-13d8-4d19-bc31-e749d2b535e0 created","level":"info"}
+{"message":"URL is required","level":"error"}
+{"message":"Rating is required","level":"error"}
+{"message":"Description is required","level":"error"}
+{"message":"List with id a8c4358e-9c11-410a-8950-e28c33ef3592 created","level":"info"}
