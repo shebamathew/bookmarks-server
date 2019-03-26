@@ -6,10 +6,13 @@ const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const bookmarkRouter = require('./bookmarkRouter')
 const listRouter = require('./list-router')
+const BookmarksService = require('./bookmarks/bookmarks-service')
 
 // data 
 
 const app = express()
+
+
 app.use(bookmarkRouter)
 app.use(listRouter)
 
@@ -33,6 +36,15 @@ app.use(function (req, res, next) {
   }
 
   next()
+})
+
+app.get('/', (req, res) => {
+  res.send('All bookmarks')
+  BookmarksService.getAllBookmarks()
+    .then(bookmarks => {
+      res.json(bookmarks)
+    })
+    .catch(next)
 })
 
 app.use(function errorHandler(error, req, res, next){
