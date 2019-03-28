@@ -4,28 +4,22 @@ const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
-const bookmarkRouter = require('./bookmarkRouter')
+const bookmarkRouter = require('./bookmark-router')
 const listRouter = require('./list-router')
-const BookmarksService = require('./bookmarks/bookmarks-service')
-
-// data 
+const logger = require('./logger')
+const BookmarksService = require('./bookmarks-service')
 
 const app = express()
 
-
-app.use(bookmarkRouter)
-app.use(listRouter)
-
-const morganOption = (NODE_ENV === 'production')
-  ? 'tiny'
-  : 'common';
-
+const morganOption = app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'common', {
+  skip: () => NODE_ENV === 'test'
+}))
 app.use(morgan(morganOption))
 app.use(cors())
 app.use(helmet())
 app.use(express.json()); 
 
-//middleware
+//validate bearer token
 app.use(function (req, res, next) {
   const apiToken = process.env.API_TOKEN
   const authToken = req.get('Authorization')
@@ -34,17 +28,13 @@ app.use(function (req, res, next) {
     logger.error(`Unauthorized request to path: ${req.path}`);
     return res.status(401).json({ error: 'Unauthorized request' })
   }
-
   next()
 })
 
+app.use(bookmarkRouter)
+
 app.get('/', (req, res) => {
-  res.send('All bookmarks')
-  BookmarksService.getAllBookmarks()
-    .then(bookmarks => {
-      res.json(bookmarks)
-    })
-    .catch(next)
+  res.send('Hello, world!')
 })
 
 app.use(function errorHandler(error, req, res, next){
@@ -57,4 +47,5 @@ app.use(function errorHandler(error, req, res, next){
   }
   res.status(500).json(response)
 })
+
 module.exports = app

@@ -1,13 +1,30 @@
 const express = require('express')
+const { isWebUri } = require('valid-url')
+const xss = require('xss')
 const uuid = require('uuid/v4')
-const logger = require('../logger')
-const bookmarkRouter = express.Router()
+const logger = require('./logger')
+const bookmarksRouter = express.Router()
+const BookmarksService = require('./bookmarks-service')
 const bodyParser = express.json()
-const { bookmarks, lists} = require('../store')
+// const { bookmarks, lists} = require('./store')
 
-bookmarkRouter 
-  .route('/bookmark')
-  .get ((req, res) => {res.json(bookmarks)})
+const serializeBookmark = bookmark => ({
+  id: bookmark.id,
+  title: xss(bookmark.title),
+  url: bookmark.url,
+  description: xss(bookmark.description),
+  rating: Number(bookmark.rating),
+})
+
+bookmarksRouter 
+  .route('/bookmarks')
+  .get((req, res, next) => {
+    BookarksService.getAllBookmarks(req.app.get('db'))
+      .then(bookmarks => {
+        res.json(bookmarks.map(serializeBookmark))
+      })
+      .catch(next)
+  })
   .post (bodyParser, (req, res) => {
     const { title, url, rating, desc } = req.body;
   
@@ -59,7 +76,7 @@ bookmarkRouter
       .json({bookmark});
   })
 
-bookmarkRouter
+bookmarksRouter
   .route('/bookmark/:id')
   .get((req, res) => {
     const { id } = req.params;
