@@ -3,7 +3,7 @@ const bookmarks = [{
     title: 'Github',
     url: 'http://www.github.com',
     rating: '4',
-    desc: 'brings together the world\'s largest community of developers.'
+    description: 'brings together the world\'s largest community of developers.'
   }]; 
 
   const lists = [{

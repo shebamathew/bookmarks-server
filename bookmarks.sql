@@ -1,14 +1,14 @@
 drop table if exists bookmarks; 
 
 create table bookmarks (
-    id INTEGER PRIMARY KEY, 
+    id SERIAL PRIMARY KEY, 
     title text NOT NULL, 
-    link text NOT NULL, 
+    url text NOT NULL, 
     rating numeric(1, 0) DEFAULT NULL,    
-    descript text DEFAULT NULL
+    description text DEFAULT NULL
 ); 
 
-insert into bookmarks (title, link, rating, descript)
+insert into bookmarks (title, url, rating, description)
 values 
     ('Github', 'http://www.github.com', 4, 'brings together the largest community of developers.'), 
     ('Youtube', 'http://www.youtube.com', 4, 'Enjoy the videos and music you love, upload original content, and share it all with friends, family, and the world on YouTube.'), 
@@ -21,5 +21,3 @@ values
     ('Google Drive', 'https://drive.google.com', DEFAULT, DEFAULT), 
     ('Trello', 'https://trello.com/en', DEFAULT, DEFAULT), 
     ('Washington Post', 'https://www.washingtonpost.com', DEFAULT, DEFAULT); 
-
-SELECT * FROM bookmarks; 
